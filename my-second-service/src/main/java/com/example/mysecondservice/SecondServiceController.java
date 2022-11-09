@@ -5,12 +5,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/second-service")
 public class SecondServiceController {
 
     @GetMapping("/welcome")
     public String welcome() {
-        return "Welcome to my  Service";
+        return "Welcome to my second Service";
     }
 
 }

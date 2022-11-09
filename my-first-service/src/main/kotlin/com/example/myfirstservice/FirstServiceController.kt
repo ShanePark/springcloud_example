@@ -5,10 +5,10 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/first-service")
 class FirstServiceController {
 
     @GetMapping("/welcome")
-    fun welcome() = "Welcome to my first second service!"
+    fun welcome() = "Welcome to my first service!"
 
 }
