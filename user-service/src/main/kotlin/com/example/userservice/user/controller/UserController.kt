@@ -2,12 +2,15 @@ package com.example.userservice.user.controller
 
 import com.example.userservice.Greeting
 import com.example.userservice.user.domain.dto.CreateUserDto
+import com.example.userservice.user.domain.dto.ResponseUserDto
 import com.example.userservice.user.domain.dto.UserDto
 import com.example.userservice.user.service.UserService
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/user-service")
 class UserController(
     private val greeting: Greeting,
     private val userService: UserService
@@ -26,10 +29,14 @@ class UserController(
     @PostMapping("/users")
     fun createUser(
         @RequestBody createUserDto: CreateUserDto
-    ): String {
+    ): ResponseEntity<ResponseUserDto> {
         val userDto = UserDto.of(createUserDto)
         userService.createUser(userDto)
-        return "Create user methoid is called"
+        val responseUser = ResponseUserDto.of(userDto)
+
+        return ResponseEntity
+            .status(HttpStatus.CREATED)
+            .body(responseUser)
     }
 
 }
