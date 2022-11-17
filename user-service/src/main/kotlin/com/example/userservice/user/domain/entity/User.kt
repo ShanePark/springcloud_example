@@ -1,5 +1,7 @@
 package com.example.userservice.user.domain.entity
 
+import com.example.userservice.order.domain.dto.ResponseOrder
+import com.example.userservice.user.domain.dto.UserDto
 import javax.persistence.*
 
 @Entity
@@ -17,6 +19,20 @@ class User(
     @Column(nullable = false)
     var encryptedPassword: String
 ) {
+    fun toDto(orders: List<ResponseOrder>?): UserDto {
+        return UserDto(
+            email = this.email,
+            name = this.name,
+            password = this.encryptedPassword,
+            userId = this.userId,
+            encryptedPassword = this.encryptedPassword,
+            orders = orders
+        )
+    }
+
+    fun toDto(): UserDto {
+        return toDto(null)
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

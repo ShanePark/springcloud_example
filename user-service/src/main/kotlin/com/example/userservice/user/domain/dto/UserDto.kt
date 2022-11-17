@@ -1,8 +1,8 @@
 package com.example.userservice.user.domain.dto
 
+import com.example.userservice.order.domain.dto.ResponseOrder
 import com.example.userservice.user.domain.entity.User
 import org.springframework.security.crypto.password.PasswordEncoder
-import java.time.LocalDateTime
 import java.util.*
 
 data class UserDto(
@@ -10,8 +10,8 @@ data class UserDto(
     val name: String,
     val password: String,
     val userId: String,
-    val createdAt: LocalDateTime,
-    val encryptedPassword: String
+    val encryptedPassword: String,
+    val orders: List<ResponseOrder>? = null,
 ) {
     fun toEntity() = User(
         email = this.email,
@@ -27,7 +27,6 @@ data class UserDto(
                 name = createUserDto.name,
                 password = createUserDto.password,
                 userId = UUID.randomUUID().toString(),
-                createdAt = LocalDateTime.now(),
                 encryptedPassword = passwordEncoder.encode(createUserDto.password)
             )
         }
