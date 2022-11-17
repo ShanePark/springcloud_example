@@ -41,7 +41,3 @@ spring:
                 baseMessage: Hi, there. It's Logging Filter
                 prelogger: true
                 postLogger: true
-        - id: user-service
-          uri: lb://user-service
-          predicates:
-            - Path=/user-service/**

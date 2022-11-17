@@ -1,6 +1,7 @@
 package com.example.userservice.user.domain.dto
 
 import com.example.userservice.user.domain.entity.User
+import org.springframework.security.crypto.password.PasswordEncoder
 import java.time.LocalDateTime
 import java.util.*
 
@@ -13,21 +14,21 @@ data class UserDto(
     val encryptedPassword: String
 ) {
     fun toEntity() = User(
-        email = email,
-        name = name,
-        userId = userId,
-        encryptedPassword = encryptedPassword
+        email = this.email,
+        name = this.name,
+        userId = this.userId,
+        encryptedPassword = this.encryptedPassword,
     )
 
     companion object {
-        fun of(createUserDto: CreateUserDto): UserDto {
+        fun of(createUserDto: CreateUserDto, passwordEncoder: PasswordEncoder): UserDto {
             return UserDto(
                 email = createUserDto.email,
                 name = createUserDto.name,
                 password = createUserDto.password,
                 userId = UUID.randomUUID().toString(),
                 createdAt = LocalDateTime.now(),
-                encryptedPassword = createUserDto.password // TODO password encryption
+                encryptedPassword = passwordEncoder.encode(createUserDto.password)
             )
         }
     }
