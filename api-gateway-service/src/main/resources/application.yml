@@ -45,3 +45,7 @@ spring:
           uri: lb://user-service
           predicates:
             - Path=/user-service/**
+        - id: catalog-service
+          uri: lb://catalog-service
+          predicates:
+            - Path=/catalog-service/**
