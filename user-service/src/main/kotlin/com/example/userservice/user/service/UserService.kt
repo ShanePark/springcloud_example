@@ -47,4 +47,10 @@ class UserService(
         } ?: throw UsernameNotFoundException("User not found : $email")
     }
 
+    fun getUserDetailsByEmail(email: String): UserDto {
+        val user = userRepository.findByEmail(email)
+        return user?.let {
+            return it.toDto()
+        } ?: throw UsernameNotFoundException("User not found : $email")
+    }
 }

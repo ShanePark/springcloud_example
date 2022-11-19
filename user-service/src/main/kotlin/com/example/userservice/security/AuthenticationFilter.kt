@@ -1,36 +1,41 @@
 package com.example.userservice.security
 
 import com.example.userservice.user.domain.dto.RequestLogin
+import com.example.userservice.user.domain.dto.UserDto
+import com.example.userservice.user.service.UserService
+import com.fasterxml.jackson.databind.ObjectMapper
+import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
+import org.springframework.security.core.userdetails.User
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import javax.servlet.FilterChain
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-class AuthenticationFilter : UsernamePasswordAuthenticationFilter() {
+class AuthenticationFilter(
+    private val objectMapper: ObjectMapper,
+    private val authManager: AuthenticationManager,
+    private val userService: UserService,
+) : UsernamePasswordAuthenticationFilter() {
 
-    override fun attemptAuthentication(request: HttpServletRequest?, response: HttpServletResponse?): Authentication {
-        val body = request?.inputStream?.bufferedReader()?.readText()
-        println(body)
+    private val log = org.slf4j.LoggerFactory.getLogger(this::class.java)
 
-        val requestLogin = RequestLogin(body)
+    override fun attemptAuthentication(request: HttpServletRequest, response: HttpServletResponse?): Authentication {
 
+        val requestLogin = objectMapper.readValue(request.inputStream, RequestLogin::class.java)
         val token = UsernamePasswordAuthenticationToken(requestLogin.email, requestLogin.password)
-        return authenticationManager.authenticate(token)
-    }
-
-    private fun RequestLogin(body: String?): RequestLogin {
-        System.err.println("body = $body")
-        TODO("Not yet implemented")
+        return authManager.authenticate(token)
     }
 
     override fun successfulAuthentication(
-        request: HttpServletRequest?,
-        response: HttpServletResponse?,
+        request: HttpServletRequest,
+        response: HttpServletResponse,
         chain: FilterChain?,
-        authResult: Authentication?
+        authResult: Authentication
     ) {
-        super.successfulAuthentication(request, response, chain, authResult)
+        val user: User = authResult.principal as User
+        val userDetail: UserDto = userService.getUserDetailsByEmail(user.username)
+        log.info("User $userDetail authenticated successfully")
     }
 }
