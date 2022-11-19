@@ -1,7 +1,6 @@
 package com.example.catalogservice.domain.entity
 
 import org.hibernate.annotations.ColumnDefault
-import java.io.Serializable
 import java.util.*
 import javax.persistence.Column
 import javax.persistence.Entity
@@ -23,7 +22,7 @@ class Catalog(
     @Column(nullable = false)
     var unitPrice: Int,
 
-    ) : Serializable {
+    ) {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
