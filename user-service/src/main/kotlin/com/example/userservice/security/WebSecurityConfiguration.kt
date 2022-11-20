@@ -27,9 +27,6 @@ class WebSecurityConfiguration(
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         return http.csrf().disable()
-//            .authorizeRequests().antMatchers("/**")
-//            .hasIpAddress("127.0.0.1")
-//            .and()
             .addFilter(
                 AuthenticationFilter(
                     objectMapper,

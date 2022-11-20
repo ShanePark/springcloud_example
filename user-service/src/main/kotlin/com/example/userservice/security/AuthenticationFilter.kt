@@ -12,6 +12,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+import java.util.*
 import javax.servlet.FilterChain
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
@@ -41,8 +42,7 @@ class AuthenticationFilter(
         val user: User = authResult.principal as User
         val userDetail: UserDto = userService.getUserDetailsByEmail(user.username)
 
-        val expiration =
-            java.util.Date(System.currentTimeMillis() + env.getProperty("token.expiration_time")!!.toLong())
+        val expiration = Date(System.currentTimeMillis() + env.getProperty("token.expiration_time")!!.toLong())
 
         val token = Jwts.builder()
             .setSubject(userDetail.userId)

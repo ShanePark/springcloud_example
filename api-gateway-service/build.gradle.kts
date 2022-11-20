@@ -22,8 +22,10 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.springframework.cloud:spring-cloud-starter-gateway")
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
+    implementation("io.jsonwebtoken:jjwt:0.9.1")
+    implementation("javax.xml.bind:jaxb-api:2.4.0-b180830.0359")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    runtimeOnly("io.netty:netty-resolver-dns-native-macos:4.1.84.Final:osx-aarch_64")
+    runtimeOnly("io.netty:netty-resolver-dns-native-macos:4.1.85.Final:osx-aarch_64")
 }
 
 dependencyManagement {

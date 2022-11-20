@@ -21,7 +21,7 @@ class LoggingFilter : AbstractGatewayFilterFactory<LoggingFilter.Config>(Config:
     )
 
     override fun apply(config: Config): GatewayFilter {
-        val filter = OrderedGatewayFilter({ exchange, chain ->
+        return OrderedGatewayFilter({ exchange, chain ->
             log.info("Logging Filter baseMessage: {}", config.baseMessage)
 
             if (config.preLogger) {
@@ -33,7 +33,6 @@ class LoggingFilter : AbstractGatewayFilterFactory<LoggingFilter.Config>(Config:
                 }
             })
         }, Ordered.HIGHEST_PRECEDENCE)
-        return filter
     }
 
 }
