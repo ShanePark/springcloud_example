@@ -4,6 +4,7 @@ import com.example.userservice.user.service.UserService
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.core.env.Environment
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -20,6 +21,7 @@ class WebSecurityConfiguration(
     private val userService: UserService,
     private val passwordEncoder: PasswordEncoder,
     private val authenticationManagerBuilder: AuthenticationManagerBuilder,
+    private val environment: Environment,
 ) {
 
     @Bean
@@ -28,7 +30,14 @@ class WebSecurityConfiguration(
 //            .authorizeRequests().antMatchers("/**")
 //            .hasIpAddress("127.0.0.1")
 //            .and()
-            .addFilter(AuthenticationFilter(objectMapper, authenticationManagerBuilder.orBuild, userService))
+            .addFilter(
+                AuthenticationFilter(
+                    objectMapper,
+                    authenticationManagerBuilder.orBuild,
+                    userService,
+                    environment
+                )
+            )
             .build()
     }
 

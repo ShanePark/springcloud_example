@@ -4,6 +4,9 @@ import com.example.userservice.user.domain.dto.RequestLogin
 import com.example.userservice.user.domain.dto.UserDto
 import com.example.userservice.user.service.UserService
 import com.fasterxml.jackson.databind.ObjectMapper
+import io.jsonwebtoken.Jwts
+import io.jsonwebtoken.SignatureAlgorithm
+import org.springframework.core.env.Environment
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
@@ -17,6 +20,7 @@ class AuthenticationFilter(
     private val objectMapper: ObjectMapper,
     private val authManager: AuthenticationManager,
     private val userService: UserService,
+    private val env: Environment,
 ) : UsernamePasswordAuthenticationFilter() {
 
     private val log = org.slf4j.LoggerFactory.getLogger(this::class.java)
@@ -36,6 +40,18 @@ class AuthenticationFilter(
     ) {
         val user: User = authResult.principal as User
         val userDetail: UserDto = userService.getUserDetailsByEmail(user.username)
-        log.info("User $userDetail authenticated successfully")
+
+        val expiration =
+            java.util.Date(System.currentTimeMillis() + env.getProperty("token.expiration_time")!!.toLong())
+
+        val token = Jwts.builder()
+            .setSubject(userDetail.userId)
+            .setExpiration(expiration)
+            .signWith(SignatureAlgorithm.HS512, env.getProperty("token.secret"))
+            .compact()
+
+        log.info("User $userDetail authenticated successfully. Token: $token")
+        response.addHeader("token", token)
+        response.addHeader("userId", userDetail.userId)
     }
 }

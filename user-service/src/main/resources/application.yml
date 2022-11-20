@@ -1,5 +1,5 @@
 server:
-  port: 0
+  port: 8080
 
 spring:
   application:
@@ -29,3 +29,7 @@ eureka:
 
 greeting:
   message: Welcome to the Simple E-Commerce Application
+
+token:
+  expiration_time: ${TOKEN_EXPIRATION_TIME:86400000}
+  secret: ${TOKEN_SECRET:secret}
