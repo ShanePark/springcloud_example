@@ -27,6 +27,8 @@ class WebSecurityConfiguration(
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         return http.csrf().disable()
+            .authorizeRequests().antMatchers("/actuator/**").permitAll()
+            .and()
             .addFilter(
                 AuthenticationFilter(
                     objectMapper,
