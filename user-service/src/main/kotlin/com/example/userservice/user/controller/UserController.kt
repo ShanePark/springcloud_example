@@ -19,7 +19,9 @@ class UserController(
     @GetMapping("/health_check")
     fun status(): String {
         val port = env.getProperty("local.server.port")
-        return "It's Working in User Service on PORT $port"
+        return "It's Working in User Service on PORT $port" +
+                ", with token = ${env.getProperty("token.secret")}" +
+                ", with token expiration time = ${env.getProperty("token.expiration_time")}"
     }
 
     @GetMapping("/welcome")
