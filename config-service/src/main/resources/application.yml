@@ -4,8 +4,12 @@ server:
 spring:
   application:
     name: config-server
+  profiles:
+    active: native
   cloud:
     config:
       server:
+        native:
+          search-locations: file://${user.home}/Documents/dev/config-repo
         git:
           uri: git@github.com:Shane-Park/springcloud_config_example.git
