@@ -1,0 +1,3 @@
+[submodule "spring-cloud-config"]
+	path = spring-cloud-config
+	url = git@github.com:Shane-Park/springcloud_config_example.git

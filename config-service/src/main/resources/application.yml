@@ -8,4 +8,4 @@ spring:
     config:
       server:
         git:
-          uri: file:///Users/shane/Documents/GitHub/git-local-repo
+          uri: git@github.com:Shane-Park/springcloud_config_example.git
