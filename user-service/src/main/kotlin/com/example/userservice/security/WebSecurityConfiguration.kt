@@ -53,7 +53,7 @@ class WebSecurityConfiguration(
     fun webSecurityCustomizer(): WebSecurityCustomizer {
         return WebSecurityCustomizer { web ->
             web.ignoring()
-                .antMatchers("/css/**", "/js/**", "/images/**", "/h2-console/**")
+                .antMatchers("/css/**", "/js/**", "/images/**", "/h2-console/**", "/health_check/**")
         }
     }
 
