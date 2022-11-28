@@ -88,8 +88,8 @@ spring:
           predicates:
             - Path=/order-service/**
 
-token:
-  secret: ${TOKEN_SECRET:secret}
+#token:
+#  secret: ${TOKEN_SECRET:secret}
 
 management:
   endpoints:
