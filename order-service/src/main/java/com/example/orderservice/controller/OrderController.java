@@ -4,6 +4,7 @@ import com.example.orderservice.domain.dto.CreateOrderDto;
 import com.example.orderservice.domain.dto.ResponseOrder;
 import com.example.orderservice.service.OrderService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/order-service")
 @RequiredArgsConstructor
+@Slf4j
 public class OrderController {
 
     private final OrderService orderService;
@@ -32,7 +34,7 @@ public class OrderController {
         return ResponseOrder.of(order);
     }
 
-    @GetMapping("{userId}/orders/")
+    @GetMapping("{userId}/orders")
     public List<ResponseOrder> getOrders(@PathVariable String userId) {
         return orderService.getOrdersByUserId(userId).stream()
                 .map(ResponseOrder::of)

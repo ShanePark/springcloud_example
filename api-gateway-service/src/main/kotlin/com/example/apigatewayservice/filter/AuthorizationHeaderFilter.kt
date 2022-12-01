@@ -40,8 +40,10 @@ class AuthorizationHeaderFilter(
 
     private fun isJwtValid(tokenString: String): Boolean {
         try {
+            val secret = env.getProperty("token.secret")
+            log.info("secret: $secret")
             val jwt = Jwts.parser()
-                .setSigningKey(env.getProperty("token.secret"))
+                .setSigningKey(secret)
                 .parseClaimsJws(tokenString)
                 .body
 

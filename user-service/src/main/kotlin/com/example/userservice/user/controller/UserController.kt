@@ -16,6 +16,8 @@ class UserController(
     private val env: Environment,
 ) {
 
+    private val log = org.slf4j.LoggerFactory.getLogger(UserController::class.java)
+
     @GetMapping("/health_check")
     fun status(): String {
         val port = env.getProperty("local.server.port")
@@ -46,15 +48,15 @@ class UserController(
         @PathVariable userId: String
     ): ResponseEntity<ResponseUserDto> {
         val userDto = userService.findUser(userId)
-        val responseUser = ResponseUserDto.of(userDto)
 
+        val responseUser = ResponseUserDto.of(userDto)
         return ResponseEntity.ok(responseUser)
     }
 
     @GetMapping("/users")
     fun findAllUsers(): ResponseEntity<Iterable<ResponseUserDto>> {
         val users = userService.findAllUsers()
-        val responseUsers = users.map { ResponseUserDto.of(it.toDto()) }
+        val responseUsers = users.map { ResponseUserDto.of(it.toDto(emptyList())) }
         return ResponseEntity.ok(responseUsers)
     }
 

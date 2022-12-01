@@ -10,8 +10,7 @@ public record ResponseOrder(
         Integer quantity,
         Integer unitPrice,
         Integer totalPrice,
-        LocalDateTime createdAt,
-        String userId
+        LocalDateTime createdDate
 ) {
     public static ResponseOrder of(Order order) {
         return new ResponseOrder(
@@ -20,8 +19,7 @@ public record ResponseOrder(
                 order.getQuantity(),
                 order.getUnitPrice(),
                 order.getTotalPrice(),
-                order.getCreatedAt(),
-                order.getUserId()
+                order.getCreatedAt()
         );
     }
 }

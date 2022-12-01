@@ -19,7 +19,7 @@ class User(
     @Column(nullable = false)
     var encryptedPassword: String
 ) {
-    fun toDto(orders: List<ResponseOrder>?): UserDto {
+    fun toDto(orders: List<ResponseOrder>): UserDto {
         return UserDto(
             email = this.email,
             name = this.name,
@@ -28,10 +28,6 @@ class User(
             encryptedPassword = this.encryptedPassword,
             orders = orders
         )
-    }
-
-    fun toDto(): UserDto {
-        return toDto(null)
     }
 
     @Id

@@ -11,7 +11,7 @@ data class UserDto(
     val password: String,
     val userId: String,
     val encryptedPassword: String,
-    val orders: List<ResponseOrder>? = null,
+    val orders: List<ResponseOrder>,
 ) {
     fun toEntity() = User(
         email = this.email,
@@ -27,7 +27,8 @@ data class UserDto(
                 name = createUserDto.name,
                 password = createUserDto.password,
                 userId = UUID.randomUUID().toString(),
-                encryptedPassword = passwordEncoder.encode(createUserDto.password)
+                encryptedPassword = passwordEncoder.encode(createUserDto.password),
+                orders = listOf(),
             )
         }
     }

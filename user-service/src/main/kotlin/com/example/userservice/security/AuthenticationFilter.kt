@@ -44,10 +44,12 @@ class AuthenticationFilter(
 
         val expiration = Date(System.currentTimeMillis() + env.getProperty("token.expiration_time")!!.toLong())
 
+        val secret = env.getProperty("token.secret")
+        log.info("secret : $secret")
         val token = Jwts.builder()
             .setSubject(userDetail.userId)
             .setExpiration(expiration)
-            .signWith(SignatureAlgorithm.HS512, env.getProperty("token.secret"))
+            .signWith(SignatureAlgorithm.HS512, secret)
             .compact()
 
         log.info("User $userDetail authenticated successfully. Token: $token")
