@@ -1,13 +1,11 @@
 package com.example.userservice.user.service
 
-import com.example.userservice.order.domain.dto.ResponseOrder
+import com.example.userservice.client.OrderServiceClient
 import com.example.userservice.user.domain.dto.CreateUserDto
 import com.example.userservice.user.domain.dto.UserDto
 import com.example.userservice.user.domain.entity.User
 import com.example.userservice.user.repository.UserRepository
-import org.springframework.core.ParameterizedTypeReference
 import org.springframework.core.env.Environment
-import org.springframework.http.HttpMethod
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
@@ -21,6 +19,7 @@ class UserService(
     private val passwordEncoder: PasswordEncoder,
     private val restTemplate: RestTemplate,
     private val env: Environment,
+    private val orderServiceClient: OrderServiceClient
 ) : UserDetailsService {
 
     val log: org.slf4j.Logger = org.slf4j.LoggerFactory.getLogger(UserService::class.java)
@@ -35,17 +34,20 @@ class UserService(
         val user = userRepository.findByUserId(userId).orElseThrow()
 
         // using rest template
-        val url = env.getProperty("order_service.url")?.let { String.format(it, userId) }
-            ?: throw IllegalStateException("order_service.url is not set")
+//        val url = env.getProperty("order_service.url")?.let { String.format(it, userId) }
+//            ?: throw IllegalStateException("order_service.url is not set")
+//
+//        val response = restTemplate.exchange(
+//            url,
+//            HttpMethod.GET,
+//            null,
+//            object : ParameterizedTypeReference<List<ResponseOrder>>() {},
+//        )
+//        val orders = response.body ?: listOf()
 
-        val response = restTemplate.exchange(
-            url,
-            HttpMethod.GET,
-            null,
-            object : ParameterizedTypeReference<List<ResponseOrder>>() {},
-        )
+        // using feign client
+        val orders = orderServiceClient.getOrders(userId)
 
-        val orders = response.body ?: listOf()
         return user.toDto(orders)
     }
 
