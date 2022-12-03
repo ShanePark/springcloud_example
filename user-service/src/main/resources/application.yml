@@ -41,3 +41,7 @@ management:
     web:
       exposure:
         include: refresh, health, beans, info, busrefresh
+
+logging:
+  level:
+    com.example.userservice.client: DEBUG

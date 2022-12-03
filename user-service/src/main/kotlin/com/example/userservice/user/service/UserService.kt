@@ -5,6 +5,7 @@ import com.example.userservice.user.domain.dto.CreateUserDto
 import com.example.userservice.user.domain.dto.UserDto
 import com.example.userservice.user.domain.entity.User
 import com.example.userservice.user.repository.UserRepository
+import feign.FeignException
 import org.springframework.core.env.Environment
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
@@ -46,9 +47,14 @@ class UserService(
 //        val orders = response.body ?: listOf()
 
         // using feign client
-        val orders = orderServiceClient.getOrders(userId)
+        return try {
+            val orders = orderServiceClient.getOrders(userId)
+            user.toDto(orders)
+        } catch (e: FeignException) {
+            log.error("Error while calling order service {}", e.message)
+            user.toDto(emptyList())
+        }
 
-        return user.toDto(orders)
     }
 
     fun findAllUsers(): Iterable<User> {
