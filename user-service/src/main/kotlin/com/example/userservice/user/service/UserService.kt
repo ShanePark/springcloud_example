@@ -5,7 +5,7 @@ import com.example.userservice.user.domain.dto.CreateUserDto
 import com.example.userservice.user.domain.dto.UserDto
 import com.example.userservice.user.domain.entity.User
 import com.example.userservice.user.repository.UserRepository
-import feign.FeignException
+import org.apache.http.HttpStatus
 import org.springframework.core.env.Environment
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
+import org.springframework.web.server.ResponseStatusException
 
 @Service
 class UserService(
@@ -47,14 +48,16 @@ class UserService(
 //        val orders = response.body ?: listOf()
 
         // using feign client
-        return try {
+        try {
             val orders = orderServiceClient.getOrders(userId)
-            user.toDto(orders)
-        } catch (e: FeignException) {
+            return user.toDto(orders)
+        } catch (e: ResponseStatusException) {
+            if (e.status.value() == HttpStatus.SC_NOT_FOUND) {
+                return user.toDto(emptyList())
+            }
             log.error("Error while calling order service {}", e.message)
-            user.toDto(emptyList())
+            throw e
         }
-
     }
 
     fun findAllUsers(): Iterable<User> {
