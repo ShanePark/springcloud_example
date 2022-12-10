@@ -22,4 +22,15 @@ public record ResponseOrder(
                 order.getCreatedAt()
         );
     }
+
+    public static ResponseOrder of(OrderDto orderDto) {
+        return new ResponseOrder(
+                orderDto.getOrderId(),
+                orderDto.getProductId(),
+                orderDto.getQuantity(),
+                orderDto.getUnitPrice(),
+                orderDto.getTotalPrice(),
+                LocalDateTime.now()
+        );
+    }
 }

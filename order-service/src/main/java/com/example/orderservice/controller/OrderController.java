@@ -4,6 +4,7 @@ import com.example.orderservice.domain.dto.CreateOrderDto;
 import com.example.orderservice.domain.dto.OrderDto;
 import com.example.orderservice.domain.dto.ResponseOrder;
 import com.example.orderservice.messagequeue.KafkaProducer;
+import com.example.orderservice.messagequeue.OrderProducer;
 import com.example.orderservice.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/order-service")
@@ -23,6 +25,7 @@ public class OrderController {
     private final OrderService orderService;
     private final Environment env;
     private final KafkaProducer kafkaProducer;
+    private final OrderProducer orderProducer;
 
     @GetMapping("/health_check")
     public String status() {
@@ -35,12 +38,26 @@ public class OrderController {
             @RequestBody CreateOrderDto createOrderDto,
             @PathVariable String userId
     ) {
-        var order = orderService.createOrder(createOrderDto, userId);
-        ResponseOrder responseOrder = ResponseOrder.of(order);
+
+        int quantity = createOrderDto.quantity();
+        int unitPrice = createOrderDto.unitPrice();
+
+        OrderDto orderDto = OrderDto.builder()
+                .productId(createOrderDto.productId())
+                .quantity(quantity)
+                .unitPrice(unitPrice)
+                .totalPrice(unitPrice * quantity)
+                .orderId(UUID.randomUUID().toString())
+                .userId(userId)
+                .build();
 
         // send order info to kafka
-        kafkaProducer.send("example-catalog-topic", OrderDto.of(userId, responseOrder));
+        kafkaProducer.send("example-catalog-topic", orderDto);
 
+        // Kafka Connect will be used to save the order to the database instead of JPA
+        orderProducer.send("orders", orderDto);
+
+        ResponseOrder responseOrder = ResponseOrder.of(orderDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseOrder);
     }
 
