@@ -23,6 +23,8 @@ dependencies {
     implementation 'org.springframework.kafka:spring-kafka'
     implementation 'org.projectlombok:lombok:1.18.24'
     implementation 'org.mariadb.jdbc:mariadb-java-client:2.7.4'
+    implementation('org.springframework.cloud:spring-cloud-starter-sleuth:3.1.5')
+    implementation('org.springframework.cloud:spring-cloud-starter-zipkin:2.2.8.RELEASE')
     annotationProcessor 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'com.h2database:h2'

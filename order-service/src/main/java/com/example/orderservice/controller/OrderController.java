@@ -3,6 +3,7 @@ package com.example.orderservice.controller;
 import com.example.orderservice.domain.dto.CreateOrderDto;
 import com.example.orderservice.domain.dto.OrderDto;
 import com.example.orderservice.domain.dto.ResponseOrder;
+import com.example.orderservice.domain.entity.Order;
 import com.example.orderservice.messagequeue.KafkaProducer;
 import com.example.orderservice.messagequeue.OrderProducer;
 import com.example.orderservice.service.OrderService;
@@ -38,7 +39,7 @@ public class OrderController {
             @RequestBody CreateOrderDto createOrderDto,
             @PathVariable String userId
     ) {
-
+        log.info("Before retrieve orders data");
         int quantity = createOrderDto.quantity();
         int unitPrice = createOrderDto.unitPrice();
 
@@ -58,6 +59,8 @@ public class OrderController {
         orderProducer.send("orders", orderDto);
 
         ResponseOrder responseOrder = ResponseOrder.of(orderDto);
+
+        log.info("just before return orders data");
         return ResponseEntity.status(HttpStatus.CREATED).body(responseOrder);
     }
 
@@ -72,6 +75,11 @@ public class OrderController {
     public ResponseOrder getOrderByOrderId(@PathVariable String orderId) {
         var order = orderService.getOrderByOrderId(orderId);
         return ResponseOrder.of(order);
+    }
+
+    @GetMapping("/orders/")
+    public List<Order> getOrderByOrderId() {
+        return orderService.findAll();
     }
 
 }

@@ -4,6 +4,12 @@ server:
 spring:
   application:
     name: order-service
+  zipkin:
+    base-url: http://localhost:9411
+    enabled: true
+    sleuth:
+      sampler:
+        probability: 1.0
   datasource:
     url : jdbc:mariadb://localhost:3306/mydb
     username : root

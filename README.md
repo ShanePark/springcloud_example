@@ -101,3 +101,9 @@ echo '
 '| curl -X POST -d @- http://localhost:8083/connectors --header "content-Type:application/json"
 ```
 
+## Zipkin
+
+```bash
+docker run -d -p 9411:9411 openzipkin/zipkin
+```
+

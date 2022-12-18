@@ -36,6 +36,7 @@ class UserService(
     fun findUser(userId: String): UserDto {
         val user = userRepository.findByUserId(userId).orElseThrow()
 
+        log.info("Before call orders microservice")
         val circuitBreaker = circuitBreakerFactory.create("circuitBreaker")
         val orders: List<ResponseOrder> = circuitBreaker.run({
             orderServiceClient.getOrders(userId)
@@ -43,6 +44,7 @@ class UserService(
             log.error("Circuit breaker has been opened", it)
             emptyList()
         })
+        log.info("After call orders microservice")
 
         return user.toDto(orders)
     }
