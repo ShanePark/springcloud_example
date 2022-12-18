@@ -4,6 +4,7 @@ import com.example.userservice.Greeting
 import com.example.userservice.user.domain.dto.CreateUserDto
 import com.example.userservice.user.domain.dto.ResponseUserDto
 import com.example.userservice.user.service.UserService
+import io.micrometer.core.annotation.Timed
 import org.springframework.core.env.Environment
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -19,6 +20,7 @@ class UserController(
     private val log = org.slf4j.LoggerFactory.getLogger(UserController::class.java)
 
     @GetMapping("/health_check")
+    @Timed(value = "users.status", longTask = true)
     fun status(): String {
         val port = env.getProperty("local.server.port")
         return "It's Working in User Service on PORT $port" +
@@ -27,6 +29,7 @@ class UserController(
     }
 
     @GetMapping("/welcome")
+    @Timed(value = "users.welcome", longTask = true)
     fun welcome(): String {
         return greeting.message
     }
