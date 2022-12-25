@@ -5,13 +5,13 @@
 ### MariaDB
 
 ```bash
-docker run \\
-	--detach \\
-	--name mariadb \\
-  --env MARIADB_USER=shane \\
-  --env MARIADB_PASSWORD=pass \\
-  --env MARIADB_ROOT_PASSWORD=pass \\
-  --publish 3306:3306 \\
+docker run \
+  --detach \
+  --name mariadb \
+  --env MARIADB_USER=shane \
+  --env MARIADB_PASSWORD=pass \
+  --env MARIADB_ROOT_PASSWORD=pass \
+  --publish 3306:3306 \
   mariadb:latest
 ```
 
@@ -20,7 +20,15 @@ docker run \\
 ### Rabbitmq
 
 ```bash
-docker run -d --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3.11-management
+docker run -d \
+  --name rabbitmq \
+  --network ecommerce-network \
+  -p 5672:5672 \
+  -p 15672:15672 \
+  -p 4369:4369 \
+  -e RABBITMQ_DEFAULT_USER=guest \
+  -e RABBITMQ_DEFAULT_PASS=guest \
+  rabbitmq:management
 ```
 
 ### Kafka
