@@ -17,7 +17,7 @@ spring:
         native:
           search-locations: file://${user.home}/Documents/dev/config-repo
         git:
-          uri: git@github.com:Shane-Park/springcloud_config_example.git
+          uri: https://github.com/Shane-Park/springcloud_config_example.git
 
 management:
   endpoint:
