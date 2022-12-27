@@ -1,24 +1,6 @@
 # Spring Cloud
-
-## Database
-
-### MariaDB
-
-```bash
-docker run \
-  --detach \
-  --name mariadb \
-  --env MARIADB_USER=shane \
-  --env MARIADB_PASSWORD=pass \
-  --env MARIADB_ROOT_PASSWORD=pass \
-  --publish 3306:3306 \
-  mariadb:latest
-```
-
 ## MessageQueue
-
 ### Rabbitmq
-
 ```bash
 docker run -d \
   --name rabbitmq \
@@ -32,7 +14,6 @@ docker run -d \
 ```
 
 ### Kafka
-
 ```bash
 # Zookeeper, Kafka
 ./bin/zookeeper-server-start.sh ./config/zookeeper.properties
