@@ -99,76 +99,29 @@ echo '
 ### Zipkin
 
 ```bash
-docker run -d -p 9411:9411 openzipkin/zipkin
+docker run -d -p 9411:9411 \
+  --network ecommerce-network \
+  --name zipkin \
+  openzipkin/zipkin
 ```
 
 ### Prometheus
 
 ```bash
-docker run \
-    --name prometheus \
-    -p 9090:9090 \
-    -v /Users/shane/Documents/dev/prometheus.yml:/etc/prometheus/prometheus.yml \
-    prom/prometheus
-```
-
-change `/etc/prometheus/prometheus.yml` or mount this file by setting up volume
-
-```yaml
-# my global config
-global:
-  scrape_interval: 15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
-  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
-  # scrape_timeout is set to the global default (10s).
-
-# Alertmanager configuration
-alerting:
-  alertmanagers:
-    - static_configs:
-        - targets:
-          # - alertmanager:9093
-
-# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
-rule_files:
-  # - "first_rules.yml"
-  # - "second_rules.yml"
-
-# A scrape configuration containing exactly one endpoint to scrape:
-# Here it's Prometheus itself.
-scrape_configs:
-  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
-  - job_name: "prometheus"
-
-    # metrics_path defaults to '/metrics'
-    # scheme defaults to 'http'.
-
-    static_configs:
-      - targets: ["localhost:9090"]
-      
-### Here is the contents added !!! ###
-  - job_name: 'user_service'
-    scrape_interval: 15s
-    metrics_path: '/user-service/actuator/prometheus'
-    static_configs:
-    - targets: ['host.docker.internal:8000']
-  - job_name: 'order-service'
-    scrape_interval: 15s
-    metrics_path: '/order-service/actuator/prometheus'
-    static_configs:
-      - targets: ['host.docker.internal:8000']
-  - job_name: 'apigateway-service'
-    scrape_interval: 15s
-    metrics_path: '/actuator/prometheus'
-    static_configs:
-    - targets: ['host.docker.internal:8000']
-
-
+docker run -d -p 9090:9090 \
+  --network ecommerce-network \
+  --name prometheus \
+  -v /Users/shane/Documents/GitHub/springcloud_example/prometheus.yml:/etc/prometheus/prometheus.yml \
+  prom/prometheus
 ```
 
 ### Grafana
 
 ```bash
-docker run -d -p 3000:3000 --name grafana grafana/grafana
+docker run -d -p 3000:3000 \
+--network ecommerce-network \
+--name grafana \
+grafana/grafana
 ```
 
 - id : admin
