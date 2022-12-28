@@ -16,7 +16,7 @@ class KafkaConsumerConfig {
 
     private fun consumerFactory(): ConsumerFactory<String, String> {
         val properties = HashMap<String, Any>()
-        properties[ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG] = "localhost:9092"
+        properties[ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG] = "172.18.0.101:9092"
         properties[ConsumerConfig.GROUP_ID_CONFIG] = "consumerGroupId"
         properties[ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java
         properties[ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java
