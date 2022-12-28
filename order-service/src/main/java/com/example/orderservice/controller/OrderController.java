@@ -52,11 +52,13 @@ public class OrderController {
                 .userId(userId)
                 .build();
 
+        orderService.createOrder(createOrderDto, userId);
+
         // send order info to kafka
         kafkaProducer.send("example-catalog-topic", orderDto);
 
-        // Kafka Connect will be used to save the order to the database instead of JPA
-        orderProducer.send("orders", orderDto);
+//        // Kafka Connect will be used to save the order to the database instead of JPA
+//        orderProducer.send("orders", orderDto);
 
         ResponseOrder responseOrder = ResponseOrder.of(orderDto);
 
